@@ -45,5 +45,19 @@ def test_employee_click_loss():
     assert result["loss"] == len(result["event_days"]) * 100
 
 
+def test_company_click_loss():
+    result = p.company_click_loss(n_employees=10,
+                                  n_days=30,
+                                  n_phishing_emails_per_week=5,
+                                  click_rate=1,
+                                  loss_per_click=100,
+                                  random_seed=42,
+                                  n_simulations=100)
+    assert isinstance(result, dict)
+    assert "company_loss" in result
+    assert "plot" in result
+    assert len(result["company_loss"]) == 100
+
+
 if __name__ == '__main__':
     pytest.main()
