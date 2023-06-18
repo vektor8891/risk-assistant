@@ -26,6 +26,24 @@ def test_employee_click_loss():
     assert "emails_opened" in result
     assert "loss" in result
 
+    # Test that loss is 0 when click rate is 0
+    result = p.employee_click_loss(n_days=30,
+                                   n_phishing_emails_per_week=5,
+                                   click_rate=0,
+                                   loss_per_click=100,
+                                   random_seed=42)
+    assert len(result["emails_opened"]) == 0
+    assert result["loss"] == 0
+
+    # Test that loss is maximal when click rate is 1
+    result = p.employee_click_loss(n_days=30,
+                                   n_phishing_emails_per_week=5,
+                                   click_rate=1,
+                                   loss_per_click=100,
+                                   random_seed=42)
+    assert len(result["emails_opened"]) == len(result["event_days"])
+    assert result["loss"] == len(result["event_days"]) * 100
+
 
 if __name__ == '__main__':
     pytest.main()
