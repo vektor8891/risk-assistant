@@ -1,9 +1,13 @@
+import sys
+
 import pytest
 
-from src import phishing as p
+sys.path.append('..')
 
 
 def test_employee_click_loss():
+    import src.phishing as p
+
     # Test that output has correct format
     result = p.employee_click_loss(n_days=30,
                                    n_phishing_emails_per_week=5,
