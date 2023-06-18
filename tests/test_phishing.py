@@ -6,6 +6,7 @@ sys.path.append('..')
 
 
 def test_employee_click_loss():
+    print(sys.path)
     import src.phishing as p
 
     # Test that output has correct format
