@@ -1,13 +1,17 @@
+import os
 import sys
 
 import pytest
 
+# Add parent directory to sys.path
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(current_dir)
+sys.path.append(parent_dir)
+
+import src.phishing as p
+
 
 def test_employee_click_loss():
-    sys.path.append('..')
-    print(sys.path)
-    import src.phishing as p
-
     # Test that output has correct format
     result = p.employee_click_loss(n_days=30,
                                    n_phishing_emails_per_week=5,
