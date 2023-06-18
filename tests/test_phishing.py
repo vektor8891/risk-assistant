@@ -2,10 +2,9 @@ import sys
 
 import pytest
 
-sys.path.append('..')
-
 
 def test_employee_click_loss():
+    sys.path.append('..')
     print(sys.path)
     import src.phishing as p
 
