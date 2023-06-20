@@ -1,7 +1,14 @@
-# estimated loss due to clicking on phishing emails for a single employee
+# Estimated loss due to clicking on phishing emails for a single employee
 def employee_click_loss(n_days, n_phishing_emails_per_week, click_rate, loss_per_click, random_seed=None):
     import numpy as np
     import random as rn
+
+    # Check inputs
+    assert n_days > 0, "Days must be positive"
+    assert n_phishing_emails_per_week >= 0, "Phishing emails must not be negative"
+    assert click_rate >= 0, "Click rate must not be negative"
+    assert click_rate <= 1, "Click rate must not be greater than 1"
+    assert loss_per_click >= 0, "Loss per click must not be negative"
 
     # Set the random seed if provided
     if random_seed is not None:
@@ -35,13 +42,16 @@ def employee_click_loss(n_days, n_phishing_emails_per_week, click_rate, loss_per
             "click_rates": click_rates, "emails_opened": emails_opened, "loss": loss}
 
 
-# simulate total loss due to clicking on phishing emails for the company
+# Simulate total loss due to clicking on phishing emails for the company
 def company_click_loss(n_employees, n_days, n_phishing_emails_per_week, click_rate, loss_per_click, n_simulations,
                        random_seed=None):
     import matplotlib.pyplot as plt
     import matplotlib.ticker as ticker
 
-    # calculate total loss
+    # Check inputs
+    assert n_employees > 0, "Employee number must be positive"
+
+    # Calculate total loss
     company_loss = []
     for simulation in range(n_simulations):
         total_loss = 0
@@ -52,14 +62,14 @@ def company_click_loss(n_employees, n_days, n_phishing_emails_per_week, click_ra
             total_loss += employee_loss['loss']
         company_loss.append(total_loss)
 
-    # plot histogram
+    # Plot histogram
     fig = plt.figure()
     plt.hist(company_loss)
     plt.xlabel('Total loss (USD)')
     plt.ylabel('Frequency')
     plt.title('Phishing Risk Simulation')
 
-    # show loss in thousands or millions
+    # Show loss in thousands or millions
     def millions_formatter(x, pos):
         return f'{x / 1_000_000:.1f}M'
 
@@ -121,8 +131,8 @@ def show_widgets():
         display.display(loader)
         company_loss = company_click_loss(n_employees=employee_input.value, n_days=years_input.value * 365,
                                           n_phishing_emails_per_week=phishing_input.value,
-                                          click_rate=click_rate_input.value / 100, loss_per_click=loss_per_click_input.value,
-                                          n_simulations=1000)
+                                          click_rate=click_rate_input.value / 100,
+                                          loss_per_click=loss_per_click_input.value, n_simulations=1000)
         display.clear_output()
         print(f"employees:       {employee_input.value}")
         print(f"time horizon:    {years_input.value} years")
