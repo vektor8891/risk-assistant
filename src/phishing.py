@@ -88,9 +88,10 @@ def company_click_loss(n_employees, n_days, n_phishing_emails_per_week, click_ra
 
 
 # show interactive widgets for user
-def show_widgets():
+def show_widgets_notebook():
     import ipywidgets as widgets
     import IPython.display as display
+    import matplotlib.pyplot as plt
 
     # Custom CSS styling for the loader
     loader_style = """
@@ -126,7 +127,6 @@ def show_widgets():
     button_restart = widgets.Button(description='Restart', button_style='danger')
 
     def button_run_callback(b):
-        import matplotlib.pyplot as plt
         loader = display.HTML('<div class="loader"></div>')
         display.display(loader)
         company_loss = company_click_loss(n_employees=employee_input.value, n_days=years_input.value * 365,
@@ -153,3 +153,48 @@ def show_widgets():
     # Display the input widgets
     display.display(display.HTML(loader_style), employee_input, years_input, phishing_input, click_rate_input,
                     loss_per_click_input, button_run)
+
+
+def show_widgets_lab():
+    import ipywidgets as widgets
+    import IPython.display as display
+    import matplotlib.pyplot as plt
+
+    global loader_style
+    global employee_input
+    global years_input
+    global phishing_input
+    global click_rate_input
+    global loss_per_click_input
+
+    output = widgets.Output()
+
+    style = {'description_width': 'initial'}
+    employee_input = widgets.IntText(description='Employees:', value=100, style=style)
+    years_input = widgets.IntSlider(description='Time horizon (years):', min=1, max=10, value=1, style=style)
+    phishing_input = widgets.IntSlider(description='Phishing emails per week:', min=1, max=10, value=1, style=style)
+    click_rate_input = widgets.IntSlider(description='Click rate (%):', min=0, max=100, value=10, step=5, style=style)
+    loss_per_click_input = widgets.IntText(description='Loss per click (USD):', value=1000, style=style)
+
+    def print_loss(_):
+        with output:
+            display.clear_output()
+            print("Simulation running. Please wait...")
+            company_loss = company_click_loss(n_employees=employee_input.value, n_days=years_input.value * 365,
+                                              n_phishing_emails_per_week=phishing_input.value,
+                                              click_rate=click_rate_input.value / 100,
+                                              loss_per_click=loss_per_click_input.value, n_simulations=1000)
+            display.clear_output()
+
+            plt.show(company_loss["plot"])
+
+    button = widgets.Button(description='Run Simulation', button_style='info')
+    button.on_click(print_loss)
+
+    display.display(employee_input)
+    display.display(years_input)
+    display.display(phishing_input)
+    display.display(click_rate_input)
+    display.display(loss_per_click_input)
+    display.display(button)
+    display.display(output)

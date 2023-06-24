@@ -10,4 +10,4 @@ sys.path.append(parent_dir)
 # Simulate phishing risk
 def phishing_risk():
     import src.phishing
-    src.phishing.show_widgets()
+    src.phishing.show_widgets_lab()
